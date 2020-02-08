@@ -53,51 +53,64 @@ class MyChart extends PureComponent {
     const { left, right, refAreaLeft, refAreaRight, top, bottom, data } = this.state
     console.log(`refAreaLeft: ${refAreaLeft}, refAreaRight: ${refAreaRight}, left: ${left}, right: ${right} indexLeft: ${this.state.indexLeft}, indexRight: ${this.state.indexRight}`)
 
-    return <ResponsiveContainer width="99%" height={320}>
-      <LineChart 
-        data={data}
-        onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel, indexLeft: e.activeTooltipIndex })}
-        onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel, indexRight: e.activeTooltipIndex })}
-        onMouseUp={this.zoom.bind(this)}
-      >
-        <XAxis
-          dataKey="date"
-          domain={[parseInt(left, 0), parseInt(right, 0)]}
-          tick={{ fontSize: 14 }}
-          tickCount={13}
-          tickFormatter={this.formatUnixTime}
-          type="number"
-          allowDataOverflow
-        />
-        <YAxis
-          domain={[bottom, top]}
-          allowDataOverflow
-        />
-        <CartesianGrid vertical={false} />
-        <Tooltip labelFormatter={this.formatUnixTime} />
-        <Line
-          dataKey="Apples"
-          stroke="#00AA00"
-          strokeWidth={2.5}
-          animationDuration={300}
-        />
-        <Line
-          dataKey="Bannanas"
-          stroke="#AAAA00"
-          strokeWidth={2.5}
-          animationDuration={300}
-        />
-        <Line
-          dataKey="Pineapple"
-          stroke="#AA0000"
-          strokeWidth={2.5}
-          animationDuration={300}
-        />
-        {(refAreaLeft && refAreaRight) &&
-          <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />
-        }
-      </LineChart>
-    </ResponsiveContainer>
+    return (
+      <div>
+        <button
+          className="btn update"
+          onClick={this.zoomOut.bind(this)}
+        >
+          Zoom Out
+        </button>
+        <ResponsiveContainer width="99%" height={320}>
+          <LineChart 
+            data={data}
+            onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel, indexLeft: e.activeTooltipIndex })}
+            onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel, indexRight: e.activeTooltipIndex })}
+            onMouseUp={this.zoom.bind(this)}
+          >
+            <XAxis
+              dataKey="date"
+              domain={[parseInt(left, 0), parseInt(right, 0)]}
+              tick={{ fontSize: 14 }}
+              tickCount={13}
+              tickFormatter={this.formatUnixTime}
+              type="number"
+              allowDataOverflow
+            />
+            <YAxis
+              domain={[bottom, top]}
+              allowDataOverflow
+            />
+            <CartesianGrid vertical={false} />
+            <Tooltip labelFormatter={this.formatUnixTime} />
+            <Line
+              dataKey="Apples"
+              stroke="#00AA00"
+              strokeWidth={2.5}
+              animationDuration={300}
+            />
+            <Line
+              dataKey="Bannanas"
+              stroke="#AAAA00"
+              strokeWidth={2.5}
+              animationDuration={300}
+            />
+            <Line
+              dataKey="Pineapple"
+              stroke="#AA0000"
+              strokeWidth={2.5}
+              animationDuration={300}
+            />
+            {(refAreaLeft && refAreaRight) &&
+              <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />
+            }
+          </LineChart>
+        </ResponsiveContainer>
+      </div>)
+  }
+
+  zoomOut() {
+    
   }
 
   zoom() {
