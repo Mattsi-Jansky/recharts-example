@@ -51,8 +51,7 @@ class MyChart extends PureComponent {
 
   render() {
     const { left, right, refAreaLeft, refAreaRight, top, bottom, data } = this.state
-    console.log(`data: ${JSON.stringify(data)}`)
-    //console.log(`refAreaLeft: ${refAreaLeft}, refAreaRight: ${refAreaRight}, indexLeft: ${this.state.indexLeft}, indexRight: ${this.state.indexRight}`)
+    console.log(`refAreaLeft: ${refAreaLeft}, refAreaRight: ${refAreaRight}, left: ${left}, right: ${right} indexLeft: ${this.state.indexLeft}, indexRight: ${this.state.indexRight}`)
 
     return <ResponsiveContainer width="99%" height={320}>
       <LineChart 
@@ -63,14 +62,16 @@ class MyChart extends PureComponent {
       >
         <XAxis
           dataKey="date"
-          domain={[left, right]}
+          domain={[parseInt(left, 0), parseInt(right, 0)]}
           tick={{ fontSize: 14 }}
           tickCount={13}
           tickFormatter={this.formatUnixTime}
           type="number"
+          allowDataOverflow
         />
         <YAxis
           domain={[bottom, top]}
+          allowDataOverflow
         />
         <CartesianGrid vertical={false} />
         <Tooltip labelFormatter={this.formatUnixTime} />
@@ -97,6 +98,44 @@ class MyChart extends PureComponent {
         }
       </LineChart>
     </ResponsiveContainer>
+  }
+
+  zoom() {
+    let { refAreaLeft, refAreaRight, indexLeft, indexRight } = this.state
+
+    if (refAreaLeft === refAreaRight || refAreaRight === '') {
+      this.setState(() => ({
+        refAreaLeft: '',
+        refAreaRight: '',
+      }))
+      return
+    }
+
+    if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft]
+
+    let [bottom, top] = this.getAxisYDomain(indexLeft, indexRight)
+
+    this.setState(() => ({
+      refAreaLeft: '',
+      refAreaRight: '',
+      left: refAreaLeft,
+      right: refAreaRight,
+      bottom,
+      top
+    }))
+  }
+
+  getAxisYDomain(from, to) {
+    const refData = this.props.data.slice(Math.max(0, from - 1), Math.min(this.props.data.length, to))
+    console.log(`refData: ${JSON.stringify(refData)}`)
+    let [bottom, top] = [refData[0].lowestQuantity, 1]
+
+    refData.forEach((entry) => {
+      if (entry.highestQuantity > top) top = entry.highestQuantity
+      if (entry.lowestQuantity < bottom) bottom = entry.lowestQuantity
+    })
+
+    return [Math.max(0, bottom - 1), top + 1]
   }
 
   formatUnixTime(unixTime) { return moment.unix(unixTime).format('DD/MM/YY') }
