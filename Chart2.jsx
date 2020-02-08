@@ -16,23 +16,35 @@ class MyChart extends PureComponent {
 
   constructor(props) {
     super(props)
+    this.state = {
+      left: 'dataMin',
+      right: 'dataMax',
+      refAreaLeft: '',
+      refAreaRight: '',
+      indexLeft: '',
+      indexRight: '',
+      bottom: 'auto',
+      top: 'auto',
+    }
   }
 
   render() {
+    const { left, right, refAreaLeft, refAreaRight, top, bottom } = this.state
+
     return <ResponsiveContainer width="99%" height={320}>
       <LineChart 
         data={this.props.data}
       >
         <XAxis
           dataKey="date"
-          domain={['auto', 'auto']}
+          domain={[left, right]}
           tick={{ fontSize: 14 }}
           tickCount={13}
           tickFormatter={this.formatUnixTime}
           type="number"
         />
         <YAxis
-          domain={['auto', 'auto']}
+          domain={[bottom, top]}
         />
         <CartesianGrid vertical={false} />
         <Tooltip labelFormatter={this.formatUnixTime} />
