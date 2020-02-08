@@ -55,7 +55,7 @@ class MyChart extends PureComponent {
     const { left, right, refAreaLeft, refAreaRight, top, bottom, data } = this.state
 
     return (
-      <div>
+      <div style={{ userSelect: 'none' }}>
         <button onClick={this.zoomOut.bind(this)} >
           Zoom Out
         </button>
