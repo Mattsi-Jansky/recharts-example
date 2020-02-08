@@ -8,6 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend
 } from 'recharts'
 
 class MyChart extends PureComponent {
@@ -21,6 +22,7 @@ class MyChart extends PureComponent {
       <LineChart 
         data={this.props.data}
       >
+        <Legend />
         <XAxis
           dataKey="date"
           domain={['auto', 'auto']}

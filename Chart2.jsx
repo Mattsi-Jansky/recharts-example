@@ -66,6 +66,7 @@ class MyChart extends PureComponent {
             onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel, indexRight: e.activeTooltipIndex })}
             onMouseUp={this.zoom.bind(this)}
           >
+            <Legend />
             <XAxis
               dataKey="date"
               domain={[left, right]}
