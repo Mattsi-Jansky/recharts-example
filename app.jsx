@@ -1,6 +1,6 @@
 import React from "react"
 import { render } from "react-dom"
-import MyChart from "./Chart1"
+import MyChart from "./Chart2"
 
 const sampleData = [
   { date: 1559520000, Apples: 101, Bannanas: 96, Pineapple: 40 },
