@@ -123,7 +123,8 @@ class MyChart extends PureComponent {
       return
     }
 
-    if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft]
+    if (indexLeft > indexRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft]
+    if (indexLeft > indexRight) [indexLeft, indexRight] = [indexRight, indexLeft]
 
     let [bottom, top] = this.getAxisYDomain(indexLeft, indexRight)
 
