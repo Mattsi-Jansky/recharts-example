@@ -28,12 +28,29 @@ class MyChart extends PureComponent {
     }
   }
 
+  zoom() {
+    let { refAreaLeft, refAreaRight, indexLeft, indexRight } = this.state
+    
+    this.setState(() => ({
+      refAreaLeft: '',
+      refAreaRight: '',
+      left: refAreaLeft,
+      right: refAreaRight,
+      bottom: 'auto',
+      top: 'auto'
+    }))
+  }
+
   render() {
     const { left, right, refAreaLeft, refAreaRight, top, bottom } = this.state
+    console.log(`refAreaLeft: ${refAreaLeft}, refAreaRight: ${refAreaRight}, indexLeft: ${this.state.indexLeft}, indexRight: ${this.state.indexRight}`)
 
     return <ResponsiveContainer width="99%" height={320}>
       <LineChart 
         data={this.props.data}
+        onMouseDown={e => this.setState({ refAreaLeft: e.activeLabel, indexLeft: e.activeTooltipIndex })}
+        onMouseMove={e => this.state.refAreaLeft && this.setState({ refAreaRight: e.activeLabel, indexRight: e.activeTooltipIndex })}
+        onMouseUp={this.zoom.bind(this)}
       >
         <XAxis
           dataKey="date"
@@ -66,6 +83,9 @@ class MyChart extends PureComponent {
           strokeWidth={2.5}
           animationDuration={300}
         />
+        {(refAreaLeft && refAreaRight) &&
+          <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} />
+        }
       </LineChart>
     </ResponsiveContainer>
   }
