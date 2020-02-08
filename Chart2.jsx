@@ -12,21 +12,23 @@ import {
   ReferenceArea
 } from 'recharts'
 
+const initialZoomState = {
+  left: 'dataMin',
+  right: 'dataMax',
+  refAreaLeft: '',
+  refAreaRight: '',
+  indexLeft: '',
+  indexRight: '',
+  bottom: 'auto',
+  top: 'auto',
+}
+
 class MyChart extends PureComponent {
 
   constructor(props) {
     super(props)
-    this.state = {
-      left: 'dataMin',
-      right: 'dataMax',
-      refAreaLeft: '',
-      refAreaRight: '',
-      indexLeft: '',
-      indexRight: '',
-      bottom: 'auto',
-      top: 'auto',
-      data: this.addHighestAndLowestFields(props.data)
-    }
+    this.state = Object.assign({}, initialZoomState)
+    this.state.data = this.addHighestAndLowestFields(props.data)
   }
 
   addHighestAndLowestFields(data) {
@@ -51,14 +53,10 @@ class MyChart extends PureComponent {
 
   render() {
     const { left, right, refAreaLeft, refAreaRight, top, bottom, data } = this.state
-    console.log(`refAreaLeft: ${refAreaLeft}, refAreaRight: ${refAreaRight}, left: ${left}, right: ${right} indexLeft: ${this.state.indexLeft}, indexRight: ${this.state.indexRight}`)
 
     return (
       <div>
-        <button
-          className="btn update"
-          onClick={this.zoomOut.bind(this)}
-        >
+        <button onClick={this.zoomOut.bind(this)} >
           Zoom Out
         </button>
         <ResponsiveContainer width="99%" height={320}>
@@ -70,7 +68,7 @@ class MyChart extends PureComponent {
           >
             <XAxis
               dataKey="date"
-              domain={[parseInt(left, 0), parseInt(right, 0)]}
+              domain={[left, right]}
               tick={{ fontSize: 14 }}
               tickCount={13}
               tickFormatter={this.formatUnixTime}
@@ -110,7 +108,7 @@ class MyChart extends PureComponent {
   }
 
   zoomOut() {
-    
+    this.setState(() => initialZoomState)
   }
 
   zoom() {
@@ -131,8 +129,8 @@ class MyChart extends PureComponent {
     this.setState(() => ({
       refAreaLeft: '',
       refAreaRight: '',
-      left: refAreaLeft,
-      right: refAreaRight,
+      left: parseInt(refAreaLeft, 0),
+      right: parseInt(refAreaRight, 0),
       bottom,
       top
     }))
@@ -140,7 +138,6 @@ class MyChart extends PureComponent {
 
   getAxisYDomain(from, to) {
     const refData = this.props.data.slice(Math.max(0, from - 1), Math.min(this.props.data.length, to))
-    console.log(`refData: ${JSON.stringify(refData)}`)
     let [bottom, top] = [refData[0].lowestQuantity, 1]
 
     refData.forEach((entry) => {
