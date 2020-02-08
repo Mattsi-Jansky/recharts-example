@@ -7,9 +7,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend,
   Tooltip,
-  ReferenceArea
 } from 'recharts'
 
 class MyChart extends PureComponent {
