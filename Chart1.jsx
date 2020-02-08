@@ -25,7 +25,7 @@ class MyChart extends PureComponent {
       >
         <XAxis
           dataKey="date"
-          domain={['dataMin', 'dataMax']}
+          domain={['auto', 'auto']}
           tick={{ fontSize: 14 }}
           tickCount={13}
           tickFormatter={this.formatUnixTime}
